@@ -1,0 +1,25 @@
+{
+  "name": "display-gyro-rotate",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": "https://github.com/Hougo13/display-gyro-rotate.git",
+  "author": "Hougo13 <hougo13@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "install": "electron-rebuild -v 1.8.4",
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "electron": "^1.8.4",
+    "electron-rebuild": "^1.7.3"
+  },
+  "dependencies": {
+    "johnny-five": "^0.14.2",
+    "jquery": "^3.3.1",
+    "rxjs": "^5.5.8",
+    "serialport": "^6.1.1",
+    "windows-display-rotate": "^1.0.0"
+  }
+}
