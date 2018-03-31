@@ -1,25 +1,66 @@
 {
   "name": "display-gyro-rotate",
+  "productName": "display-gyro-rotate",
   "version": "1.0.0",
-  "main": "main.js",
-  "repository": "https://github.com/Hougo13/display-gyro-rotate.git",
-  "author": "Hougo13 <hougo13@gmail.com>",
-  "license": "MIT",
+  "description": "My Electron application description",
+  "main": "src/index.ts",
   "scripts": {
-    "install": "electron-rebuild -v 1.8.4",
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "tslint --project tsconfig.json --type-check --force"
   },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-react": "^6.24.1",
-    "electron": "^1.8.4",
-    "electron-rebuild": "^1.7.3"
+  "keywords": [],
+  "author": "hougo",
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "yarn"
+      },
+      "electronWinstallerConfig": {
+        "name": "display_gyro_rotate"
+      },
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "displaygyrorotate"
+      }
+    }
   },
   "dependencies": {
+    "@types/electron-devtools-installer": "^2.0.2",
+    "@types/react": "^0.14.55",
+    "@types/react-dom": "^0.14.20",
+    "electron-compile": "^6.4.2",
+    "electron-devtools-installer": "^2.1.0",
+    "electron-squirrel-startup": "^1.0.0",
     "johnny-five": "^0.14.2",
-    "jquery": "^3.3.1",
-    "rxjs": "^5.5.8",
-    "serialport": "^6.1.1",
+    "mobx": "^4.1.1",
+    "mobx-react": "^5.0.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-hot-loader": "^3.0.0-beta.6",
+    "react-uwp": "^1.1.8",
+    "tslib": "^1.4.0",
     "windows-display-rotate": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^5.1.1",
+    "electron-prebuilt-compile": "1.8.4",
+    "tslint": "^5.1.0",
+    "typescript": "~2.2.2"
   }
 }
