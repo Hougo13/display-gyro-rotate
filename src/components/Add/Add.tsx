@@ -4,7 +4,7 @@ import { View, ProgressCircle } from "react-desktop/windows";
 
 import { IDefaultProps, NewAutoDisplaysStep } from "../../Models";
 import { Template } from "../Template/Template";
-import { SerialStep } from "./Steps";
+import { SerialStep, AddressStep } from "./Steps";
 
 @inject("store")
 @observer
@@ -14,6 +14,7 @@ export class Add extends React.Component<IDefaultProps, any> {
             case NewAutoDisplaysStep.SERIAL:
                 return <SerialStep />;
             case NewAutoDisplaysStep.ADDRESS:
+                return <AddressStep />;
             case NewAutoDisplaysStep.CALIBRATE_LANDSCAPE:
             case NewAutoDisplaysStep.CALIBRATE_REVERSE:
             default:

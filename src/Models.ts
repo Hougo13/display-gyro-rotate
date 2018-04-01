@@ -56,6 +56,10 @@ export interface IStore {
     newAutoDisplay: NewAutoDisplay;
     serialPorts: string[];
     availibleSerialPorts: string[];
+    availibleSensorsAddresses: {
+        serialPort: string;
+        sensorAddresses: Array<"0x68" | "0x69">;
+    }[];
     fetchSerialPorts(): void;
 }
 

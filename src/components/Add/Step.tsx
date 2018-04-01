@@ -63,6 +63,7 @@ export class Step extends React.Component<IStepProps, any> {
                     width="100%"
                     horizontalAlignment="center"
                     verticalAlignment="center"
+                    layout="vertical"
                 >
                     {body}
                 </View>

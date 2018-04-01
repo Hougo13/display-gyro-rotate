@@ -2,26 +2,25 @@ import * as React from "react";
 import { observer, inject } from "mobx-react";
 import { Radio } from "react-desktop/windows";
 
-import { IDefaultProps, NewAutoDisplaysStep } from "../../Models";
+import { IDefaultProps } from "../../Models";
 import { Step } from "./Step";
 
 @inject("store")
 @observer
-export class SerialStep extends React.Component<IDefaultProps, any> {
+export class AddressStep extends React.Component<IDefaultProps, any> {
     constructor(props) {
         super(props);
-        props.store.fetchSerialPorts();
         this.state = {
             isNext: false,
         };
     }
 
     nextHandler() {
-        this.props.store.newAutoDisplay.step = NewAutoDisplaysStep.ADDRESS;
+        console.log("next");
     }
 
     radioHandler(e) {
-        this.props.store.newAutoDisplay.serialPort = e.target.value;
+        this.props.store.newAutoDisplay.sensorAddress = e.target.value;
         this.setState((prev, pr) => {
             return {
                 isNext: true,
@@ -30,24 +29,27 @@ export class SerialStep extends React.Component<IDefaultProps, any> {
     }
 
     render() {
+        const availibleSensorAddresses = this.props.store.availibleSensorsAddresses.find(
+            r => r.serialPort == this.props.store.newAutoDisplay.serialPort
+        );
         return (
             <Step
                 onNext={this.nextHandler.bind(this)}
                 isNext={this.state.isNext}
             >
-                {this.props.store.availibleSerialPorts.length > 0
-                    ? this.props.store.availibleSerialPorts.map(sp => {
+                {availibleSensorAddresses.sensorAddresses.length > 0
+                    ? availibleSensorAddresses.sensorAddresses.map(sa => {
                           return (
                               <Radio
-                                  key={sp}
-                                  label={sp}
-                                  name="serialPort"
+                                  key={sa}
+                                  label={sa}
+                                  name="sensorAddress"
                                   onChange={this.radioHandler.bind(this)}
-                                  defaultValue={sp}
+                                  defaultValue={sa}
                               />
                           );
                       })
-                    : "No serial port availible"}
+                    : "No sensor address availible"}
             </Step>
         );
     }
