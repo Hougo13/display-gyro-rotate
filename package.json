@@ -48,9 +48,9 @@
     "mobx": "^4.1.1",
     "mobx-react": "^5.0.0",
     "react": "^15.4.1",
+    "react-desktop": "^0.3.3",
     "react-dom": "^15.4.1",
     "react-hot-loader": "^3.0.0-beta.6",
-    "react-uwp": "^1.1.8",
     "tslib": "^1.4.0",
     "windows-display-rotate": "^1.0.0"
   },
