@@ -1,6 +1,7 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
 import { View, Radio } from "react-desktop/windows";
+import * as WindowDisp from "windows-display-rotate";
 
 import { IDefaultProps, Route } from "../../models";
 import { Template } from "../Template/Template";
@@ -8,7 +9,7 @@ import { AddStepProps, AddStepState } from "./Add";
 
 @inject("store")
 @observer
-export class AddressStep extends React.Component<AddStepProps, AddStepState> {
+export class DisplayStep extends React.Component<AddStepProps, AddStepState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,15 +20,17 @@ export class AddressStep extends React.Component<AddStepProps, AddStepState> {
     render() {
         const { store, addState, updateAddState } = this.props;
 
+        let displayIds = [];
+
+        for (let i = 0; i < WindowDisp.size(); i++) {
+            displayIds.push(i);
+        }
+
         return (
             <Template
-                title={"Select the sensor address"}
+                title={"Select the display"}
                 footerNav
                 onNext={() => {
-                    store.addSensor(
-                        addState.serialPort,
-                        addState.sensorAddress
-                    );
                     updateAddState(addState);
                 }}
                 onCancel={() => {
@@ -46,30 +49,26 @@ export class AddressStep extends React.Component<AddStepProps, AddStepState> {
                     verticalAlignment="center"
                     layout="vertical"
                 >
-                    {store.availibleSensorsAddresses[addState.serialPort]
-                        .length > 0
-                        ? store.availibleSensorsAddresses[
-                              addState.serialPort
-                          ].map(sa => {
+                    {displayIds.length > 0
+                        ? displayIds.map(displayId => {
                               return (
                                   <Radio
-                                      key={sa}
-                                      label={sa}
-                                      name="sensorAddress"
+                                      key={displayId}
+                                      label={displayId.toString()}
+                                      name="displayId"
                                       onChange={e => {
-                                          addState.sensorAddress =
-                                              e.target.value;
+                                          addState.displayId = e.target.value;
                                           this.setState((prev, pr) => {
                                               return {
                                                   isNext: true,
                                               };
                                           });
                                       }}
-                                      defaultValue={sa}
+                                      defaultValue={displayId}
                                   />
                               );
                           })
-                        : "No sensor address availible"}
+                        : "No Display availible"}
                 </View>
             </Template>
         );

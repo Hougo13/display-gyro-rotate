@@ -2,7 +2,7 @@ import * as React from "react";
 import { observer, inject } from "mobx-react";
 import { Button } from "react-desktop/windows";
 
-import { IDefaultProps } from "../../Models";
+import { IDefaultProps } from "../../models";
 import { FooterNav } from "./FooterNav";
 
 export interface ITemplateProps extends IDefaultProps {
@@ -10,8 +10,8 @@ export interface ITemplateProps extends IDefaultProps {
     title: string;
     footerNav?: boolean;
     isNext?: boolean;
-    onNext?(event: any): void;
-    onCancel?(event: any): void;
+    onNext?(event?: any): void;
+    onCancel?(event?: any): void;
 }
 
 const containerStyle: React.CSSProperties = {

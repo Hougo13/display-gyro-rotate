@@ -4,46 +4,34 @@ import * as SerialPort from "serialport";
 import {
     AutoDisplay,
     Route,
-    DisplayOrientation,
     IStore,
-    NewAutoDisplay,
-    NewAutoDisplaysStep,
-    NewAutoDisplayStatus,
-} from "./Models";
+    DisplayOrientation,
+    Displays,
+    Boards,
+    BoardStatus,
+} from "./models";
+import { nicer } from "./services";
 
-const mokupDisps: AutoDisplay[] = [
-    {
-        displayId: 0,
-        serialPort: "COM12",
-        sensorAddress: "0x68",
-        sensorCalibration: {
-            landscapeValue: 90,
-            inverterd: false,
-        },
-        displayOrientation: DisplayOrientation.LANDSCAPE,
-    },
-];
+const defaultSensorAddresses = ["0x68", "0x69"];
 
 export class Store implements IStore {
+    @observable error?: string = undefined;
+    @observable loading: boolean = false;
     @observable route: Route = Route.HOME;
-    @observable autoDisplays: AutoDisplay[] = [...mokupDisps];
-    @observable
-    newAutoDisplay: NewAutoDisplay = {
-        step: NewAutoDisplaysStep.SERIAL,
-        status: NewAutoDisplayStatus.READY,
-        error: "Error",
-    };
+    @observable boards: Boards = {};
+    @observable autoDisplays: AutoDisplay[] = [];
     @observable serialPorts: string[] = [];
 
     @computed
     get availibleSerialPorts() {
         return this.serialPorts.reduce((acc, sp) => {
-            const displays: AutoDisplay[] = this.autoDisplays.filter(
-                disp => disp.serialPort == sp
-            );
-            if (displays.length < 2) {
-                acc.push(sp);
+            const board = this.boards[sp];
+            if (board) {
+                if (Object.keys(board.sensors).length == 2) {
+                    return acc;
+                }
             }
+            acc.push(sp);
             return acc;
         }, []);
     }
@@ -51,39 +39,124 @@ export class Store implements IStore {
     @computed
     get availibleSensorsAddresses() {
         return this.serialPorts.reduce((acc, sp) => {
-            const displays: AutoDisplay[] = this.autoDisplays.filter(
-                disp => disp.serialPort == sp
-            );
-            if (displays.length < 2) {
-                const defaultAddresses = ["0x68", "0x69"];
-                const result = {
-                    serialPort: sp,
-                    sensorAddresses: displays.reduce((acc, disp) => {
-                        return acc.filter(a => a != disp.sensorAddress);
-                    }, defaultAddresses),
-                };
-                acc.push(result);
+            const board = this.boards[sp];
+            if (board) {
+                if (Object.keys(board.sensors).length == 2) {
+                    return acc;
+                } else {
+                    acc[sp] = defaultSensorAddresses.reduce((acc, sA) => {
+                        if (!board.sensors[sA]) {
+                            acc.push(sA);
+                        }
+                        return acc;
+                    }, []);
+                    return acc;
+                }
+            } else {
+                acc[sp].push(defaultSensorAddresses);
             }
             return acc;
-        }, []);
+        }, {});
+    }
+
+    @computed
+    get displays(): Displays {
+        return this.autoDisplays.reduce((acc, autoDisplay) => {
+            const {
+                serialPort,
+                sensorAddress,
+                displayId,
+                landscapeValue,
+                inverterd,
+            } = autoDisplay;
+
+            const sensorValue = nicer(
+                this.boards[serialPort].sensors[sensorAddress],
+                landscapeValue,
+                inverterd
+            );
+
+            let orientation: DisplayOrientation = DisplayOrientation.LANDSCAPE;
+
+            if (sensorValue <= 45 && sensorValue > 315) {
+                orientation = DisplayOrientation.LANDSCAPE;
+            } else if (sensorValue > 45 && sensorValue <= 135) {
+                orientation = DisplayOrientation.PORTRAIT;
+            } else if (sensorValue > 135 && sensorValue <= 225) {
+                orientation = DisplayOrientation.LANDSCAPE_INVERTED;
+            } else if (sensorValue > 225 && sensorValue <= 315) {
+                orientation = DisplayOrientation.PORTRAIT_INVERTED;
+            }
+
+            acc[displayId] = orientation;
+
+            return acc;
+        }, {});
     }
 
     @action
     async fetchSerialPorts() {
-        this.newAutoDisplay.status = NewAutoDisplayStatus.PENDING;
         console.log("fetch");
+        this.loading = true;
         try {
             const serialPorts = await SerialPort.list();
             runInAction(() => {
                 this.serialPorts = serialPorts.map(sp => sp.comName);
-                this.newAutoDisplay.status = NewAutoDisplayStatus.READY;
+                this.loading = false;
             });
         } catch (error) {
             runInAction(() => {
-                this.newAutoDisplay.error = "Cannot list the serial ports";
-                this.newAutoDisplay.status = NewAutoDisplayStatus.ERROR;
                 console.error(error);
+                this.error = "Error while fetching";
+                this.loading = false;
             });
         }
+    }
+
+    @action
+    addBoard(serialPort: string) {
+        this.loading = true;
+        let boards = { ...this.boards };
+        boards[serialPort] = {
+            status: BoardStatus.NOT_CONNECTED,
+            sensors: {},
+        };
+        this.boards = boards;
+    }
+
+    @action
+    removeBoard(serialPort: string) {
+        let boards = { ...this.boards };
+        delete boards[serialPort];
+        this.boards = boards;
+    }
+
+    @action
+    addSensor(serialPort: string, sensorAddress: "0x68" | "0x69") {
+        let boards = { ...this.boards };
+        boards[serialPort].sensors[sensorAddress] = 255;
+        this.boards = boards;
+    }
+
+    @action
+    setBoardStatus(serialPort: string, status: BoardStatus): void {
+        this.boards[serialPort].status = status;
+        this.loading = false;
+    }
+
+    @action
+    updateSensorValue(
+        serialPort: string,
+        sensorAddress: "0x68" | "0x69",
+        value: number
+    ): void {
+        let sensors = { ...this.boards[serialPort].sensors };
+        sensors[sensorAddress] = value;
+        this.boards[serialPort].sensors = sensors;
+    }
+
+    @action
+    addAutoDisplay(autoDisplay: AutoDisplay): void {
+        this.autoDisplays = [...this.autoDisplays, autoDisplay];
     }
 }

@@ -4,8 +4,10 @@ import { observer, Provider } from "mobx-react";
 import { Route } from "./Models";
 import { Store } from "./Store";
 import { Home, Add } from "./components";
+import { BoardsService } from "./services";
 
 const store = new Store();
+const boardsService = new BoardsService(store);
 
 @observer
 export class App extends React.Component<any, any> {

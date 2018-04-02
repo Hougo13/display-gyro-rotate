@@ -1,8 +1,8 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
 
-import { IDefaultProps } from "../Models";
-import { DisplayCard } from "./";
+import { IDefaultProps } from "../../models";
+import { DisplayCard } from "./DisplayCard";
 
 const style = {
     textAlign: "center",

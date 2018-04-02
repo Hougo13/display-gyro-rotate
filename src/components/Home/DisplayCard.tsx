@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
 
-import { AutoDisplay, IDefaultProps } from "../Models";
+import { AutoDisplay, IDefaultProps } from "../../models";
 
 export interface IDisplayCardProps extends IDefaultProps {
     autoDisplay: AutoDisplay;

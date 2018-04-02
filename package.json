@@ -55,6 +55,7 @@
     "windows-display-rotate": "^1.0.0"
   },
   "devDependencies": {
+    "@types/johnny-five": "^0.0.35",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
