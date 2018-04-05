@@ -139,6 +139,13 @@ export class Store implements IStore {
     }
 
     @action
+    removeSensor(serialPort: string, sensorAddress: "0x68" | "0x69") {
+        let boards = { ...this.boards };
+        delete boards[serialPort].sensors[sensorAddress];
+        this.boards = boards;
+    }
+
+    @action
     setBoardStatus(serialPort: string, status: BoardStatus): void {
         this.boards[serialPort].status = status;
         this.loading = false;
@@ -158,5 +165,21 @@ export class Store implements IStore {
     @action
     addAutoDisplay(autoDisplay: AutoDisplay): void {
         this.autoDisplays = [...this.autoDisplays, autoDisplay];
+    }
+
+    @action
+    removeAutoDisplay(autoDisplay: AutoDisplay): void {
+        this.removeSensor(autoDisplay.serialPort, autoDisplay.sensorAddress);
+        this.cleanBoards();
+        this.autoDisplays = this.autoDisplays.filter(aD => aD != autoDisplay);
+    }
+
+    @action
+    cleanBoards(): void {
+        for (let serialPort in this.boards) {
+            if (Object.keys(this.boards[serialPort].sensors).length == 0) {
+                this.removeBoard(serialPort);
+            }
+        }
     }
 }

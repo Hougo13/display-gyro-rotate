@@ -52,7 +52,9 @@ export interface IStore {
     fetchSerialPorts(): void;
     addBoard(serialPort: string): void;
     removeBoard(serialPort: string): void;
+    cleanBoards(): void;
     addSensor(serialPort: string, sensorAddress: "0x68" | "0x69"): void;
+    removeSensor(serialPort: string, sensorAddress: "0x68" | "0x69"): void;
     setBoardStatus(serialPort: string, status: BoardStatus): void;
     updateSensorValue(
         serialPort: string,
@@ -60,4 +62,5 @@ export interface IStore {
         value: number
     ): void;
     addAutoDisplay(autoDisplay: AutoDisplay): void;
+    removeAutoDisplay(autoDisplay: AutoDisplay): void;
 }

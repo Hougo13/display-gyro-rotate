@@ -43,6 +43,7 @@
     "@types/react-dom": "^0.14.20",
     "electron-compile": "^6.4.2",
     "electron-devtools-installer": "^2.1.0",
+    "electron-json-storage": "^4.0.2",
     "electron-squirrel-startup": "^1.0.0",
     "johnny-five": "^0.14.2",
     "mobx": "^4.1.1",
