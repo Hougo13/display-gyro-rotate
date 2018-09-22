@@ -1,12 +1,11 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
-import { Button } from "react-desktop/windows";
 
 import { IDefaultProps } from "../../models";
 import { FooterNav } from "./FooterNav";
 
 export interface ITemplateProps extends IDefaultProps {
-    children: JSX.Element;
+    children?: JSX.Element;
     title: string;
     footerNav?: boolean;
     isNext?: boolean;

@@ -2,7 +2,7 @@ import * as storage from "electron-json-storage";
 import * as os from "os";
 import { autorun } from "mobx";
 import { promisify } from "util";
-import { IStore, AutoDisplay, Boards, BoardStatus } from "../Models";
+import { IStore, AutoDisplay, Boards, BoardStatus } from "../models";
 
 export interface IStorageBackup {
     autoDisplays: AutoDisplay[];

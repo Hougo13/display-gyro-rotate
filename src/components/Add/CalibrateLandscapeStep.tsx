@@ -10,8 +10,8 @@ import { AddStepProps, AddStepState } from "./Add";
 @inject("store")
 @observer
 export class CalibrateLandscapeStep extends React.Component<
-    AddStepProps,
-    AddStepState
+AddStepProps,
+AddStepState
 > {
     constructor(props) {
         super(props);
@@ -22,7 +22,9 @@ export class CalibrateLandscapeStep extends React.Component<
 
     render() {
         const { store, addState, updateAddState } = this.props;
-
+        if (store == undefined) {
+            return <p>Error</p>;
+        }
         addState.landscapeValue =
             store.boards[addState.serialPort].sensors[addState.sensorAddress];
 

@@ -1,12 +1,12 @@
 import * as React from "react";
 import { observer, Provider } from "mobx-react";
 
-import { Route } from "./Models";
+import { Route, IStore } from "./models";
 import { Store } from "./Store";
 import { Home, Add } from "./components";
 import { BoardsService, DisplayService, StorageService } from "./services";
 
-const store = new Store();
+const store: IStore = new Store();
 const boardsService = new BoardsService(store);
 const displayService = new DisplayService(store);
 const storageService = new StorageService(store);

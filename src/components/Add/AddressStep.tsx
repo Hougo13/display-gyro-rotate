@@ -9,7 +9,7 @@ import { AddStepProps, AddStepState } from "./Add";
 @inject("store")
 @observer
 export class AddressStep extends React.Component<AddStepProps, AddStepState> {
-    constructor(props) {
+    constructor(props: AddStepProps) {
         super(props);
         this.state = {
             isNext: false,
@@ -18,7 +18,9 @@ export class AddressStep extends React.Component<AddStepProps, AddStepState> {
 
     render() {
         const { store, addState, updateAddState } = this.props;
-
+        if (store == undefined) {
+            return <p>Error</p>;
+        }
         return (
             <Template
                 title={"Select the sensor address"}

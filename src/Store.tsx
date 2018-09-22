@@ -12,7 +12,7 @@ import {
 } from "./models";
 import { nicer } from "./services";
 
-const defaultSensorAddresses = ["0x68", "0x69"];
+const defaultSensorAddresses: Array<"0x68" | "0x69"> = ["0x68", "0x69"];
 
 export class Store implements IStore {
     @observable error?: string = undefined;
@@ -24,7 +24,7 @@ export class Store implements IStore {
 
     @computed
     get availibleSerialPorts() {
-        return this.serialPorts.reduce((acc, sp) => {
+        return this.serialPorts.reduce((acc: string[], sp) => {
             const board = this.boards[sp];
             if (board) {
                 if (Object.keys(board.sensors).length == 2) {
@@ -38,24 +38,24 @@ export class Store implements IStore {
 
     @computed
     get availibleSensorsAddresses() {
-        return this.serialPorts.reduce((acc, sp) => {
+        return this.serialPorts.reduce((aSA, sp) => {
             const board = this.boards[sp];
-            if (board) {
-                if (Object.keys(board.sensors).length == 2) {
-                    return acc;
-                } else {
-                    acc[sp] = defaultSensorAddresses.reduce((acc, sA) => {
-                        if (!board.sensors[sA]) {
-                            acc.push(sA);
-                        }
-                        return acc;
-                    }, []);
-                    return acc;
+            if (board != undefined) {
+                if (Object.keys(board.sensors).length < 2) {
+                    aSA[sp] = defaultSensorAddresses.reduce(
+                        (acc: Array<"0x68" | "0x69">, sA) => {
+                            if (!board.sensors[sA]) {
+                                acc.push(sA);
+                            }
+                            return acc;
+                        },
+                        []
+                    );
                 }
             } else {
-                acc[sp].push(defaultSensorAddresses);
+                aSA[sp] = defaultSensorAddresses;
             }
-            return acc;
+            return aSA;
         }, {});
     }
 

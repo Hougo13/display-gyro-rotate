@@ -2,7 +2,7 @@ import * as React from "react";
 import { observer, inject } from "mobx-react";
 import { Button, View } from "react-desktop/windows";
 
-import { IDefaultProps, Route } from "../../Models";
+import { IDefaultProps, Route } from "../../models";
 import { Template } from "../";
 import { DisplayCard } from "./DisplayCard";
 

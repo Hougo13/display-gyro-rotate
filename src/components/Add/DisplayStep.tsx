@@ -10,7 +10,7 @@ import { AddStepProps, AddStepState } from "./Add";
 @inject("store")
 @observer
 export class DisplayStep extends React.Component<AddStepProps, AddStepState> {
-    constructor(props) {
+    constructor(props: AddStepProps) {
         super(props);
         this.state = {
             isNext: false,
@@ -19,7 +19,9 @@ export class DisplayStep extends React.Component<AddStepProps, AddStepState> {
 
     render() {
         const { store, addState, updateAddState } = this.props;
-
+        if (store == undefined) {
+            return <p>Error</p>;
+        }
         let displayIds = [];
 
         for (let i = 0; i < WindowDisp.size(); i++) {
@@ -56,9 +58,9 @@ export class DisplayStep extends React.Component<AddStepProps, AddStepState> {
                                       key={displayId}
                                       label={displayId.toString()}
                                       name="displayId"
-                                      onChange={e => {
+                                      onChange={(e: MouseEvent) => {
                                           addState.displayId = e.target.value;
-                                          this.setState((prev, pr) => {
+                                          this.setState(() => {
                                               return {
                                                   isNext: true,
                                               };

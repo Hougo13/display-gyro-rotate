@@ -48,7 +48,7 @@ export interface IStore {
     availibleSerialPorts: string[];
     availibleSensorsAddresses: {
         [serialPort: string]: Array<"0x68" | "0x69">;
-    }[];
+    };
     fetchSerialPorts(): void;
     addBoard(serialPort: string): void;
     removeBoard(serialPort: string): void;

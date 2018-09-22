@@ -41,5 +41,6 @@
             "check-separator",
             "check-type"
         ]
-    }
+    },
+    "extends": ["tslint-mobx"]
 }

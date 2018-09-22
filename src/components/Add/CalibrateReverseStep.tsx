@@ -22,7 +22,9 @@ export class CalibrateReverseStep extends React.Component<
 
     render() {
         const { store, addState, updateAddState } = this.props;
-
+        if (store == undefined) {
+            return <p>Error</p>;
+        }
         const sensorValue = fromZero(
             store.boards[addState.serialPort].sensors[addState.sensorAddress],
             addState.landscapeValue
